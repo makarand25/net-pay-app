@@ -38,7 +38,7 @@ export class NetPayApiService {
   generateSecret(){
     console.log("inside generateSecret");
     let headers = new Headers();
-    headers.append('Authorization', 'Basic '+btoa('w5001q1a:Asfau@16'));
+    headers.append('Authorization', 'Basic '+btoa('<username>:<pwd>'));
     headers.append('Content-Type', 'application/json');
     headers.append('x-fnma-channel', 'api');
     headers.append('x-fnma-sub-channel', 'netpay');
