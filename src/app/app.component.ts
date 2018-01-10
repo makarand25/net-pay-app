@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
+import 'rxjs';
 
 import { NetPayApiService } from './services/netpayapi-service';
 
@@ -21,106 +22,72 @@ export class AppComponent implements OnInit {
 
   private clientId: string;
   private clientSecret: string;
-  private accessToken: string='d96459ed-0735-4dae-a360-7200793e604d';
+  private clientIdGenerated: boolean = false;
+  private accessToken: string;
+  private refreshToken: string;
   private apiKey: string;
+  private health: string;
 
-  constructor(private http: Http){
+  constructor(private http: Http, private netpaySvc: NetPayApiService){
     
-    setTimeout(() => {
+    /*setTimeout(() => {
       if(this.clientId !== null){
         this.generateAccessToken();
       }
     }, 2000);
     
+    setTimeout(() => {
+      if(this.accessToken !== null){
+        this.getApiKey();
+      }
+    }, 3000);*/
+
   }
 
   ngOnInit(){
-      this.generateSecret();
+      //this.generateSecret();
   }
 
   generateSecret(){
-    let headers = new Headers();
-    headers.append('Authorization', 'Basic '+btoa('w5001q1a:Asfau@16'));
-    headers.append('Content-Type', 'application/json');
-    headers.append('x-fnma-channel', 'api');
-    headers.append('x-fnma-sub-channel', 'netpay');
-
-    let opts = new RequestOptions();
-    opts.headers = headers;
-    
-    let url = 'http://localhost:1337/api.acptfanniemae.com/cdxapi/client-secret/createsecret'
-
-    this.http.post(url ,'',
-       opts).subscribe(
-        (res: Response) => { //this.data = res.json();
-              // console.log(this.data)
-              this.extractData(res); 
-              this.clientId=res.json().responseEntity.clientId;
-              this.clientSecret = res.json().responseEntity.clientSecret
-              console.log('Got client id: ' + this.clientId);
-            },
-      msg => console.error('Error: ${msg.status} ${msg.statusText}') 
+    console.log("inside generateSecret");
+    this.netpaySvc.generateSecret().subscribe(
+      (res: Response) => {
+        this.clientId=res.json().responseEntity.clientId;
+        this.clientSecret = res.json().responseEntity.clientSecret;
+      }
     );
-    
   }
 
   generateAccessToken(){
-    let headers = new Headers();
-    headers.append('Authorization', 'Basic '+btoa('w5001q1a:Asfau@16'));
-    headers.append('Content-Type', 'application/json');
-    headers.append('x-fnma-channel', 'api');
-    //headers.append('x-fnma-sub-channel', 'netpay');
-    headers.append('x-fnma-client-id', this.clientId);
-    headers.append('x-fnma-client-secret', this.clientSecret);
-
-    let opts = new RequestOptions();
-    opts.headers = headers;
-    
-    let url = 'http://localhost:1337/api.acptfanniemae.com/cdx-api/accesstoken';
-
-    this.http.post(url, '',
-       opts).subscribe(
-        (res: Response) => { //this.data = res.json();
-              console.log(res.json())
-              this.extractData(res); 
-              this.accessToken=res.json().responseEntity.accessToken;
-              
-            },
-      msg => console.error('Error: ${msg.status} ${msg.statusText}') 
-    );
+    console.log("inside generateAccessToken()");
+    this.netpaySvc.generateAccessToken().subscribe(
+      (res: Response) => {
+        this.accessToken = res.json().responseEntity.token;
+        this.refreshToken = res.json().responseEntity.refreshToken;
+      }
+    )
 
   }
 
-  getApiKey(){
-    let headers = new Headers();
-    
-    headers.append('Content-Type', 'application/json');
-    
-    headers.append('x-fnma-channel', 'api');
-    headers.append('x-fnma-clientId', this.clientId);
-    headers.append('x-fnma-access-token', this.accessToken);
-    
-    
-    let opts = new RequestOptions();
-    opts.headers = headers;
-    
-    let url = 'http://localhost:1337/api.acptfanniemae.com:443/cdx-api/client-secret/getapikey';
-    
-    this.http.post(url, '',
-       opts).subscribe(
-        (res: Response) => { //this.data = res.json();
-              console.log(res.json())
-              this.extractData(res); 
-              this.apiKey=res.json().responseEntity.apiKey;
-              
-            },
-      msg => console.error('Error: ${msg.status} ${msg.statusText}') 
-    );
-
+  generateApiKey(){
+    console.log("inside generateApiKey()");
+    this.netpaySvc.generateApiKey().subscribe(
+      (res: Response) => {
+        this.apiKey = res.json().responseEntity.apiKey;
+      }
+    )
   }
 
   private extractData(res: Response) {
     let body = res.json();
     //this.data = body;
+  }
+
+  checkHealth(){
+    this.netpaySvc.checkHealth().subscribe(
+      (res: Response) => {
+        this.health = res.text();
+      }
+    )
   }
 }

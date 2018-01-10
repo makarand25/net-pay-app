@@ -1,8 +1,43 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h4> Client Id : {{ clientId }} </h4>
-  <h4> Client Secret: {{ clientSecret }} </h4>
-  <h4> Access Token: {{ accessToken }} </h4>
+<div class="container">
+  
+  <div class="row">
+
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+    <img src="./assets/images/fannie_mae_logo.png" style="width:100 px; height: 50px" class="img-responsive" />
+      <ul class="nav nav-pills">
+        <li role="presentation" class="nav-item"
+        ><a class="nav-link" href="#" routerLinkActive="active">Home</a></li>
+        <li role="presentation" class="nav-item" ><a class="nav-link" routerLink="/netpaydetails">Post Data</a></li>
+      </ul>
+    </div>
+    <br>
+  </div>
+
+
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+
+      <button class="btn btn-primary" (click)="generateSecret()">Generate Client Secret</button>
+      <ul class="list-group">
+        <li class="list-group-item"><h4 class="highlight"> Client Id : {{ clientId }} </h4></li>
+        <li class="list-group-item"><h4> Client Secret: {{ clientSecret }} </h4></li>
+      </ul>
+      <button class="btn btn-primary"  (click)="generateAccessToken()">Generate AccessToken</button>
+      <ul class="list-group">
+        <li class="list-group-item"><h4> Access Token: {{ accessToken }} </h4></li>
+        <li class="list-group-item"><h4> Refresh Token: {{ refreshToken }} </h4></li>
+      </ul>
+      <button class="btn btn-primary"  (click)="generateApiKey()">Generate Api Key</button>
+        <ul class="list-group">
+          <li class="list-group-item"><h4> Api Key: {{ apiKey }} </h4></li>
+        </ul>
+      <button class="btn btn-primary"  (click)="checkHealth()">Check Health</button>
+        <ul class="list-group">
+          <li class="list-group-item"><h4> Health Status: {{ health }} </h4></li>
+        </ul>
+    </div>
+  </div>
 </div>
 
 
