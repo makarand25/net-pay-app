@@ -6,15 +6,22 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NetpaydetailsComponent } from './netpaydetails/netpaydetails.component';
+import { HealthcheckComponent } from './healthcheck/healthcheck.component';
+import { HomeComponent } from './home/home.component';
+import { NetPayApiService } from './services/netpayapi-service';
 
 const appRoutes: Routes = [
+  {path: '', component: HomeComponent},
+  {path: "healthcheck", component:HealthcheckComponent},
   {path: "netpaydetails", component: NetpaydetailsComponent},
   
 ];
 @NgModule({
   declarations: [
     AppComponent,
-    NetpaydetailsComponent
+    NetpaydetailsComponent,
+    HealthcheckComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +30,9 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes)
 
   ],
-  providers: [AppComponent],
+  providers: [AppComponent,
+              NetPayApiService
+              ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,43 +1,102 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="container">
   
-  <div class="row">
+  <!--<div class="row">
 
     <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
     <img src="./assets/images/fannie_mae_logo.png" style="width:100 px; height: 50px" class="img-responsive" />
       <ul class="nav nav-pills">
         <li role="presentation" class="nav-item"
-        ><a class="nav-link" href="#" routerLinkActive="active">Home</a></li>
+        ><a class="nav-link active" routeLink="/" routerLinkActive="active">Home</a></li>
         <li role="presentation" class="nav-item" ><a class="nav-link" routerLink="/netpaydetails">Post Data</a></li>
       </ul>
     </div>
     <br>
-  </div>
+  </div>-->
+  <header class="masthead">
+        <h3 class="text-muted">NetPay Application</h3>
 
-
-  <div class="row">
-    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark rounded mb-3">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" 
+            data-target="#navbarCollapse" aria-controls="navbarCollapse" 
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav text-md-center nav-justified w-100">
+              <li class="nav-item active">
+                <a class="nav-link" routerLink="/">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" routerLink="/healthcheck">Oauth & Health Check</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Post Data</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">About</a>
+              </li>
+             
+            </ul>
+          </div>
+        </nav>
+      </header>
+  <main role="main">
+    <!--<div class="jumbotron">
+          <h1 align="center">Calculate Net Pay For Borrower(s)!</h1>
+          <p class="lead" align="center">This application accepts Borrower(s)'s asset data and calculates the 
+            net pay for the given Borrower(s). Additionally it can also ask Questions along the way.
+          </p>
+          <p align="center"><a class="btn btn-lg btn-success" routerLink="/healthcheck" 
+          button (click)="changeStyle()">Get started</a></p>
+      </div>
+     <div class="row">
+       <div class="col-lg-4">
+        <div class="form-group" >
+            <label for="exampleFormControlSelect1">Select NetPay Environment:</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+              <option>netpay</option>
+              <option>netpaytest</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputUserId1">User Id:</label>
+            <input type="email" class="form-control" id="exampleInputUserId1" aria-describedby="emailHelp" placeholder="Enter Test User Id">
+            <small id="emailHelp" class="form-text text-muted">Enter the Test User Id to use.</small>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+     </div>
+      
+    
+      <div class="row">
+      <div class="col-lg-4">
       <button class="btn btn-primary" (click)="generateSecret()">Generate Client Secret</button>
       <ul class="list-group">
-        <li class="list-group-item"><h4 class="highlight"> Client Id : {{ clientId }} </h4></li>
-        <li class="list-group-item"><h4> Client Secret: {{ clientSecret }} </h4></li>
+        <li class="list-group-item"><label> Client Id : {{ clientId }} </label></li>
+        <li class="list-group-item"><label> Client Secret: {{ clientSecret }} </label></li>
       </ul>
       <button class="btn btn-primary"  (click)="generateAccessToken()">Generate AccessToken</button>
       <ul class="list-group">
-        <li class="list-group-item"><h4> Access Token: {{ accessToken }} </h4></li>
-        <li class="list-group-item"><h4> Refresh Token: {{ refreshToken }} </h4></li>
+        <li class="list-group-item"><label> Access Token: {{ accessToken }} </label></li>
+        <li class="list-group-item"><label> Refresh Token: {{ refreshToken }} </label></li>
       </ul>
       <button class="btn btn-primary"  (click)="generateApiKey()">Generate Api Key</button>
         <ul class="list-group">
-          <li class="list-group-item"><h4> Api Key: {{ apiKey }} </h4></li>
+          <li class="list-group-item "><label class="wordwrap">  Api Key: {{ apiKey }} </label></li>
         </ul>
       <button class="btn btn-primary"  (click)="checkHealth()">Check Health</button>
         <ul class="list-group">
-          <li class="list-group-item"><h4> Health Status: {{ health }} </h4></li>
+          <li class="list-group-item"><label> Health Status: {{ health }} </label></li>
         </ul>
     </div>
-  </div>
+  </div>-->
+  <router-outlet></router-outlet>
+  </main>
 </div>
 
 
