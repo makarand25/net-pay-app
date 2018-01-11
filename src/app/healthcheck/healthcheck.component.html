@@ -2,22 +2,35 @@
   <div class="card">
       <h5 class="card-header">NetPay Environment & User Details</h5>
       <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #frm="ngForm">
       <div class="form-group" >
           <label for="exampleFormControlSelect1">Select NetPay Environment:</label>
-          <select class="form-control" id="exampleFormControlSelect1">
+          <select class="form-control" id="exampleFormControlSelect1"
+            ngModel name="environment"
+            [disabled]="submitted">
             <option>netpay</option>
             <option>netpaytest</option>
           </select>
         </div>
         <div class="form-group">
           <label for="exampleInputUserId1">User Id:</label>
-          <input type="input" class="form-control" id="exampleInputUserId1" aria-describedby="emailHelp" placeholder="Enter Test User Id">
+          <input type="input" class="form-control" id="exampleInputUserId1" 
+          [disabled]="submitted"
+          placeholder="Enter Test User Id"
+          ngModel
+          name="userId">
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <input type="password" class="form-control" id="exampleInputPassword1" 
+          placeholder="Password"
+          [disabled]="submitted"
+          ngModel 
+          name="password">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
+        <button  class="btn btn-primary" (click)="resetForm()">Reset</button>
+      </form>
       </div>
    </div>
   </div>

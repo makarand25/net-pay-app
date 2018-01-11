@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs';
@@ -11,6 +12,7 @@ import { NetPayApiService } from '../services/netpayapi-service';
   styleUrls: ['./healthcheck.component.css']
 })
 export class HealthcheckComponent implements OnInit {
+  @ViewChild('frm') form: NgForm;
 
   private apiBaseURL ='https://api.acptfanniemae.com/';
   private apiSecretURL='https://api.acptfanniemae.com/cdxapi/client-secret/createsecret';
@@ -24,6 +26,8 @@ export class HealthcheckComponent implements OnInit {
   private refreshToken: string;
   private apiKey: string;
   private health: string;
+
+  private submitted: boolean = false;
 
   constructor(private http: Http, private netpaySvc: NetPayApiService){
 
@@ -71,4 +75,14 @@ export class HealthcheckComponent implements OnInit {
     )
   }
 
+  onSubmit(){
+    this.submitted=true;
+    console.log(this.form);
+    this.netpaySvc.setUserIdAndPassword(this.form.value.userId, this.form.value.password);
+  }
+
+  resetForm(){
+    this.submitted=false;
+    this.form.reset();
+  }
 }

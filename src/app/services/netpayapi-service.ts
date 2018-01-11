@@ -9,6 +9,8 @@ export class NetPayApiService {
   private corsUrl = 'http://cors-anywhere.herokuapp.com/';
   data: Response;
 
+  private userId: string;
+  private password: string;
   private clientId: string;
   private clientSecret: string;
   private clientIdGenerated: boolean = false;
@@ -17,28 +19,21 @@ export class NetPayApiService {
 
   constructor(private http: Http){
     
-    /*setTimeout(() => {
-      if(this.clientId !== null){
-        this.generateAccessToken();
-      }
-    }, 2000);
-    
-    setTimeout(() => {
-      if(this.accessToken !== null){
-        this.getApiKey();
-      }
-    }, 3000);*/
-
   }
 
   ngOnInit(){
       //this.generateSecret();
   }
 
+  setUserIdAndPassword(userId: string, password: string){
+    this.userId=userId;
+    this.password=password;
+  }
+
   generateSecret(){
     console.log("inside generateSecret");
     let headers = new Headers();
-    headers.append('Authorization', 'Basic '+btoa('<username>:<pwd>'));
+    headers.append('Authorization', 'Basic '+btoa(this.userId+':'+this.password));
     headers.append('Content-Type', 'application/json');
     headers.append('x-fnma-channel', 'api');
     headers.append('x-fnma-sub-channel', 'netpay');
@@ -66,7 +61,8 @@ export class NetPayApiService {
 
   generateAccessToken(){
     let headers = new Headers();
-    headers.append('Authorization', 'Basic '+btoa('<username>:<pwd>'));
+    
+    headers.append('Authorization', 'Basic '+btoa(this.userId+':'+this.password));
     headers.append('Content-Type', 'application/json');
     headers.append('x-fnma-channel', 'api');
     //headers.append('x-fnma-sub-channel', 'netpay');
