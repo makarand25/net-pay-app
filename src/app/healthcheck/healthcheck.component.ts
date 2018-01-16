@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { Router } from '@angular/router';
 import 'rxjs/add/operator/map';
 import 'rxjs';
+import 'rxjs/add/operator/catch';
 
 import { NetPayApiService } from '../services/netpayapi-service';
 
@@ -16,11 +18,11 @@ export class HealthcheckComponent implements OnInit {
 
   private apiBaseURL ='https://api.acptfanniemae.com/';
   private apiSecretURL='https://api.acptfanniemae.com/cdxapi/client-secret/createsecret';
-  private corsUrl = 'http://cors-anywhere.herokuapp.com/';
+  
   data: Response;
 
   private clientId: string;
-  private clientSecret: string;
+  private clientSecret: string; 
   private clientIdGenerated: boolean = false;
   private accessToken: string;
   private refreshToken: string;
@@ -28,8 +30,12 @@ export class HealthcheckComponent implements OnInit {
   private health: string;
 
   private submitted: boolean = false;
+  private enableAccessToken: boolean = false;
+  private enableApiKey: boolean = false;
+  private enableHealth: boolean = false;
 
-  constructor(private http: Http, private netpaySvc: NetPayApiService){
+  constructor(private http: Http, private netpaySvc: NetPayApiService,
+              private route: Router){
 
   }
 
@@ -42,6 +48,10 @@ export class HealthcheckComponent implements OnInit {
       (res: Response) => {
         this.clientId=res.json().responseEntity.clientId;
         this.clientSecret = res.json().responseEntity.clientSecret;
+        this.enableAccessToken=true;
+      },
+      (err) => {
+        this.clientId=err.statusText; 
       }
     );
   }
@@ -52,6 +62,7 @@ export class HealthcheckComponent implements OnInit {
       (res: Response) => {
         this.accessToken = res.json().responseEntity.token;
         this.refreshToken = res.json().responseEntity.refreshToken;
+        this.enableApiKey = true;
       }
     )
 
@@ -62,6 +73,7 @@ export class HealthcheckComponent implements OnInit {
     this.netpaySvc.generateApiKey().subscribe(
       (res: Response) => {
         this.apiKey = res.json().responseEntity.apiKey;
+        this.enableHealth=true;
       }
     )
   }
@@ -79,10 +91,28 @@ export class HealthcheckComponent implements OnInit {
     this.submitted=true;
     console.log(this.form);
     this.netpaySvc.setUserIdAndPassword(this.form.value.userId, this.form.value.password);
+    this.netpaySvc.setEnvironment(this.form.value.netpayEnvironment);
+
+    this.form.controls.netpayEnvironment.disable();
+    this.form.controls.userId.disable();
+    this.form.controls.password.disable();
+
+    
   }
 
-  resetForm(){
-    this.submitted=false;
-    this.form.reset();
+  reset(){
+    this.form.controls.netpayEnvironment.enable();
+    this.form.controls.userId.enable();
+    this.form.controls.password.enable();
+
   }
+
+  goToPost(){
+    this.route.navigate['netpaydetails'];
+  }
+
+  generate(){
+    
+  }
+  
 }

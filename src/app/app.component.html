@@ -12,14 +12,14 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav text-md-center nav-justified w-100">
-          <li class="nav-item active">
+          <li class="nav-item" [routerLinkActive]="['active']">
             <a class="nav-link" routerLink="/">Home <span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" [routerLinkActive]="['active']">
             <a class="nav-link" routerLink="/healthcheck" >Oauth & Health Check</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" routerLink="/netpaydetails">Post Data</a>
+          <li class="nav-item" [routerLinkActive]="['active']">
+            <a class="nav-link" routerLink="/netpaydetails">Post Data</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">About</a>

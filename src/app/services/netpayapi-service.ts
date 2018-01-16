@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/catch';
 @Injectable()
 export class NetPayApiService {
 
- private apiBaseURL ='https://api.acptfanniemae.com/';
-  private apiSecretURL='https://api.acptfanniemae.com/cdxapi/client-secret/createsecret';
-  private corsUrl = 'http://cors-anywhere.herokuapp.com/';
+  private apiBaseURL ='api.acptfanniemae.com';
+  private proxyURL = 'http://localhost:1337';
   data: Response;
 
   private userId: string;
@@ -16,18 +17,21 @@ export class NetPayApiService {
   private clientIdGenerated: boolean = false;
   private accessToken: string;
   private apiKey: string;
+  private netpayEnv: string;
 
   constructor(private http: Http){
-    
   }
 
   ngOnInit(){
-      //this.generateSecret();
   }
 
   setUserIdAndPassword(userId: string, password: string){
     this.userId=userId;
     this.password=password;
+  }
+
+  setEnvironment(env: string){
+    this.netpayEnv = env;
   }
 
   generateSecret(){
@@ -40,8 +44,9 @@ export class NetPayApiService {
 
     let opts = new RequestOptions();
     opts.headers = headers;
-    
-    let url = 'http://localhost:1337/api.acptfanniemae.com/cdxapi/client-secret/createsecret'
+
+    // let url = 'http://localhost:1337/api.acptfanniemae.com/cdxapi/client-secret/createsecret'
+    let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/client-secret/createsecret';
 
     return this.http.post(url ,'',
        opts).map(
@@ -54,8 +59,15 @@ export class NetPayApiService {
               //this.clientIdGenerated=true;
               return res;
             },
-      msg => console.error('Error: ${msg.status} ${msg.statusText}') 
-    );
+      msg => {
+        console.error('Error: ${msg.status} ${msg.statusText}')
+        return msg;
+      }  
+    ).catch(
+      (err) => {
+        
+       return err;
+    });
     
   }
 
@@ -65,48 +77,44 @@ export class NetPayApiService {
     headers.append('Authorization', 'Basic '+btoa(this.userId+':'+this.password));
     headers.append('Content-Type', 'application/json');
     headers.append('x-fnma-channel', 'api');
-    //headers.append('x-fnma-sub-channel', 'netpay');
     headers.append('x-fnma-client-id', this.clientId);
     headers.append('x-fnma-client-secret', this.clientSecret);
 
     let opts = new RequestOptions();
     opts.headers = headers;
     
-    let url = 'http://localhost:1337/api.acptfanniemae.com/cdxapi/accesstoken';
+    let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/accesstoken';
 
     return this.http.post(url, '',
        opts).map(
-        (res: Response) => { //this.data = res.json();
+        (res: Response) => { 
               console.log(res.json())
-              //this.extractData(res); 
               this.accessToken=res.json().responseEntity.token;
               return res;
             },
-      msg => console.error('Error: ${msg.status} ${msg.statusText}') 
-    );
+      (res: Response) => {console.error('Error:'+ res.json().statusText)}
+    )
+    
 
   }
 
   generateApiKey(){
     let headers = new Headers();
     
-    headers.append('Content-Type', 'application/json');
-    
+    headers.append('Content-Type', 'application/json');   
     headers.append('x-fnma-channel', 'api');
     headers.append('x-fnma-clientId', this.clientId);
     headers.append('x-fnma-access-token', this.accessToken);
-    
-    
+       
     let opts = new RequestOptions();
     opts.headers = headers;
-    
-    let url = 'http://localhost:1337/api.acptfanniemae.com/cdxapi/client-secret/getapikey';
-    
+       
+    let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/client-secret/getapikey';
+
     return this.http.post(url, '',
        opts).map(
-        (res: Response) => { //this.data = res.json();
+        (res: Response) => { 
               console.log(res.json())
-              //this.extractData(res); 
               this.apiKey=res.json().responseEntity.apiKey;
               return res;
             },
@@ -119,33 +127,87 @@ export class NetPayApiService {
 
     let headers = new Headers();
     
-    headers.append('Content-Type', 'application/json');
-    
+    headers.append('Content-Type', 'application/json');   
     headers.append('x-fnma-channel', 'api');
     headers.append('x-fnma-api-key', this.apiKey);
     headers.append('x-fnma-access-token', this.accessToken);
     
-    
     let opts = new RequestOptions();
     opts.headers = headers;
     
-    let url = 'http://localhost:1337/api.acptfanniemae.com/netpay/originations/borrowers/v1/netpay/health';
-    
+    let url = this.proxyURL+'/'+this.apiBaseURL+'/'+this.netpayEnv+'/originations/borrowers/v1/netpay/health';
+
     return this.http.get(url, 
        opts).map(
-        (res: Response) => { //this.data = res.json();
-              console.log(res.text());
-              //this.extractData(res); 
-              
+        (res: Response) => { 
+              console.log(res.text()); 
               return res;
-            },
-      msg => console.error('Error: ${msg.status} ${msg.statusText}') 
-    );
+            }
+
+    ).catch(
+      (err) => {
+       return err.statusText;
+    })
+      
   }
 
   private extractData(res: Response) {
     let body = res.json();
-    //this.data = body;
+  }
+
+  public generate(){
+    let headers = new Headers();
+    headers.append('Authorization', 'Basic '+btoa(this.userId+':'+this.password));
+    headers.append('Content-Type', 'application/json');
+    headers.append('x-fnma-channel', 'api');
+    headers.append('x-fnma-sub-channel', 'netpay');
+
+    let opts = new RequestOptions();
+    opts.headers = headers;
+
+    // let url = 'http://localhost:1337/api.acptfanniemae.com/cdxapi/client-secret/createsecret'
+    let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/client-secret/createsecret';
+
+    return this.http.post(url ,'',
+       opts).map(
+        (res: Response) => { 
+              this.clientId=res.json().responseEntity.clientId;
+              this.clientSecret = res.json().responseEntity.clientSecret
+            
+              // return res;
+            },
+      msg => {
+        console.error('Error: ${msg.status} ${msg.statusText}')
+        return msg;
+      }  
+    ).flatMap(
+      (data : any) => {
+
+        let headers = new Headers();
+    
+        headers.append('Authorization', 'Basic '+btoa(this.userId+':'+this.password));
+        headers.append('Content-Type', 'application/json');
+        headers.append('x-fnma-channel', 'api');
+        headers.append('x-fnma-client-id', this.clientId);
+        headers.append('x-fnma-client-secret', this.clientSecret);
+
+        let opts = new RequestOptions();
+        opts.headers = headers;
+        
+        let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/accesstoken';
+        return this.http.post(url, '',
+          opts).map(
+            (res: Response) => { 
+                  console.log(res.json())
+                  this.accessToken=res.json().responseEntity.token;
+                  
+                },
+          (res: Response) => {console.error('Error:'+ res.json().statusText)}
+        )
+      }
+    
+    );
+    
   }
 
 }

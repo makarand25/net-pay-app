@@ -7,7 +7,8 @@
           <label for="exampleFormControlSelect1">Select NetPay Environment:</label>
           <select class="form-control" id="exampleFormControlSelect1"
             ngModel name="environment"
-            [disabled]="submitted">
+            
+            name="netpayEnvironment" required>
             <option>netpay</option>
             <option>netpaytest</option>
           </select>
@@ -15,21 +16,21 @@
         <div class="form-group">
           <label for="exampleInputUserId1">User Id:</label>
           <input type="input" class="form-control" id="exampleInputUserId1" 
-          [disabled]="submitted"
+          
           placeholder="Enter Test User Id"
           ngModel
-          name="userId">
+          name="userId" required>
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">Password</label>
           <input type="password" class="form-control" id="exampleInputPassword1" 
           placeholder="Password"
-          [disabled]="submitted"
+          
           ngModel 
-          name="password">
+          name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <button  class="btn btn-primary" (click)="resetForm()">Reset</button>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+        <button type="submit" class="btn btn-danger" >Reset</button>
       </form>
       </div>
    </div>
@@ -47,7 +48,7 @@
               <li class="list-group-item"><label> Client Secret: {{ clientSecret }} </label></li>
             </ul>
             <br>
-            <p align="center" ><button class="btn btn-primary" 
+            <p align="center" ><button class="btn btn-primary" [disabled]="!submitted"
               (click)="generateSecret()">Generate Client Secret</button></p>
           </div>
         </div>
@@ -62,7 +63,8 @@
             </ul>
             <br>
             <p align="center">
-              <button class="btn btn-primary"  (click)="generateAccessToken()">Generate AccessToken</button>
+              <button class="btn btn-primary"  (click)="generateAccessToken()" [disabled]="!enableAccessToken"
+              >Generate AccessToken</button>
             </p>
           </div>
         </div>
@@ -72,11 +74,12 @@
           <h5 class="card-header">API Key</h5>
           <div class="card-body">
               <ul class="list-group">
-                <li class="list-group-item wordwrap"><label>Api Key: {{ apiKey }} </label></li>
+                <li class="list-group-item">Api Key: {{ apiKey }} </li>
               </ul>
               <br>
               <p align="center">
-                <button class="btn btn-primary"  (click)="generateApiKey()">Generate Api Key</button>
+                <button class="btn btn-primary"  (click)="generateApiKey()" [disabled]="!enableApiKey" >
+                  Generate Api Key</button>
               </p>
           </div>
         </div>
@@ -90,10 +93,22 @@
               </ul>
               <br>
               <p align="center">
-                <button class="btn btn-primary"  (click)="checkHealth()">Check Health</button>
+                <button class="btn btn-primary"  (click)="checkHealth()" 
+                  [disabled]="!enableHealth">Check Health</button>
               </p>
           </div>
         </div>
      </div>
     </div>
   </div>
+  <br>
+  <div class="container">
+    <!--<div class="card">
+      <div class="card-body">-->
+           <p align="center">
+             <button class="btn btn-success" [disabled]="!enableHealth" 
+              (click)="goToPost()">Post Data</button></p>
+      <!--</div>
+    </div>-->
+  </div>
+  

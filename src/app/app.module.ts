@@ -12,8 +12,8 @@ import { NetPayApiService } from './services/netpayapi-service';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
-  {path: "healthcheck", component:HealthcheckComponent},
-  {path: "netpaydetails", component: NetpaydetailsComponent},
+  {path: 'healthcheck', component:HealthcheckComponent},
+  {path: 'netpaydetails', component: NetpaydetailsComponent}
   
 ];
 @NgModule({
