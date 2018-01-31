@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
+
 @Injectable()
 export class NetPayApiService {
 
-  private apiBaseURL ='api.acptfanniemae.com';
+  private apiBaseURL ='https://api.acptfanniemae.com';
   private proxyURL = 'http://localhost:1337';
   data: Response;
 
@@ -46,7 +49,8 @@ export class NetPayApiService {
     opts.headers = headers;
 
     // let url = 'http://localhost:1337/api.acptfanniemae.com/cdxapi/client-secret/createsecret'
-    let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/client-secret/createsecret';
+    // let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/client-secret/createsecret';
+    let url = this.apiBaseURL+'/cdxapi/client-secret/createsecret';
 
     return this.http.post(url ,'',
        opts).map(
@@ -65,7 +69,7 @@ export class NetPayApiService {
       }  
     ).catch(
       (err) => {
-        
+       console.log("Error Occured!!");
        return err;
     });
     
@@ -83,7 +87,8 @@ export class NetPayApiService {
     let opts = new RequestOptions();
     opts.headers = headers;
     
-    let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/accesstoken';
+    // let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/accesstoken';
+    let url = this.apiBaseURL+'/cdxapi/accesstoken';
 
     return this.http.post(url, '',
        opts).map(
@@ -109,7 +114,8 @@ export class NetPayApiService {
     let opts = new RequestOptions();
     opts.headers = headers;
        
-    let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/client-secret/getapikey';
+    // let url = this.proxyURL+'/'+this.apiBaseURL+'/cdxapi/client-secret/getapikey';
+    let url = this.apiBaseURL+'/cdxapi/client-secret/getapikey';
 
     return this.http.post(url, '',
        opts).map(
@@ -135,8 +141,9 @@ export class NetPayApiService {
     let opts = new RequestOptions();
     opts.headers = headers;
     
-    let url = this.proxyURL+'/'+this.apiBaseURL+'/'+this.netpayEnv+'/originations/borrowers/v1/netpay/health';
+    // let url = this.proxyURL+'/'+this.apiBaseURL+'/'+this.netpayEnv+'/originations/borrowers/v1/netpay/health';
 
+    let url = this.apiBaseURL+'/'+this.netpayEnv+'/originations/borrowers/v1/netpay/health';
     return this.http.get(url, 
        opts).map(
         (res: Response) => { 
@@ -155,12 +162,44 @@ export class NetPayApiService {
     let body = res.json();
   }
 
+  public calculateNetPay(data: string){
+    
+    let headers = new Headers();
+    console.log("Inside service calculateNetPay");
+    headers.append('Content-Type', 'application/json');   
+    headers.append('x-fnma-channel', 'api');
+    headers.append('x-fnma-api-key', this.apiKey);
+    headers.append('x-fnma-access-token', this.accessToken);
+    
+    let opts = new RequestOptions();
+    opts.headers = headers;
+    
+    // let url = this.proxyURL+'/'+this.apiBaseURL+'/'+this.netpayEnv+'/originations/borrowers/v1/netpay/health';
+
+    let url = this.apiBaseURL+'/'+this.netpayEnv+'/originations/borrowers/v1/netpay/';
+    return this.http.post(url, data,
+       opts).map(
+        (res: Response) => { 
+              console.log(res.text()); 
+              return res;
+            }
+
+    )  
+  }
+
+  public handleError(error: Response) {
+    console.error(error.statusText);
+    return Observable.throw(error.json().error || 'Server error');
+  }
+
   public generate(){
     let headers = new Headers();
     headers.append('Authorization', 'Basic '+btoa(this.userId+':'+this.password));
     headers.append('Content-Type', 'application/json');
     headers.append('x-fnma-channel', 'api');
     headers.append('x-fnma-sub-channel', 'netpay');
+    headers.append('x-fnma-access-token', this.accessToken);
+    headers.append('x-fnma-api-key', this.apiKey);
 
     let opts = new RequestOptions();
     opts.headers = headers;

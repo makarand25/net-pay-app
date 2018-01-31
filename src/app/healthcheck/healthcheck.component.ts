@@ -21,21 +21,23 @@ export class HealthcheckComponent implements OnInit {
   
   data: Response;
 
-  private clientId: string;
-  private clientSecret: string; 
-  private clientIdGenerated: boolean = false;
-  private accessToken: string;
-  private refreshToken: string;
-  private apiKey: string;
-  private health: string;
+   clientId: string;
+   clientSecret: string; 
+   clientIdGenerated: boolean = false;
+   accessToken: string;
+   refreshToken: string;
+   apiKey: string;
+   health: string;
 
-  private submitted: boolean = false;
-  private enableAccessToken: boolean = false;
-  private enableApiKey: boolean = false;
-  private enableHealth: boolean = false;
+   submitted: boolean = false;
+   enableAccessToken: boolean = false;
+   enableApiKey: boolean = false;
+   enableHealth: boolean = false;
 
-  constructor(private http: Http, private netpaySvc: NetPayApiService,
-              private route: Router){
+  constructor(private router: Router,
+              private http: Http, 
+              private netpaySvc: NetPayApiService
+              ){
 
   }
 
@@ -83,7 +85,8 @@ export class HealthcheckComponent implements OnInit {
     this.netpaySvc.checkHealth().subscribe(
       (res: Response) => {
         this.health = res.text();
-      }
+      },
+      (err) => { this.health = err}
     )
   }
 
@@ -107,12 +110,4 @@ export class HealthcheckComponent implements OnInit {
 
   }
 
-  goToPost(){
-    this.route.navigate['netpaydetails'];
-  }
-
-  generate(){
-    
-  }
-  
 }

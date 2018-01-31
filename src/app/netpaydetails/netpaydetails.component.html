@@ -1,6 +1,134 @@
 <!--<div class="container">-->
   
-  <div id="accordion" role="tablist" aria-multiselectable="true">
+<div class="container">
+  <div class="card">
+    <h5 class="card-header">Net Pay Operation</h5>
+    <div class="card-body">
+      <p>
+            <button class="btn btn-primary" (click)="toggle('calculateNetPay')" 
+            aria-expanded="false" aria-controls="multiCollapseExample1">Calculate Net Pay (POST)</button>
+            <button class="btn btn-primary" type="button"  (click)="toggle('updateNetPay')"
+            aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Update Net Pay (PUT)</button>
+            <button class="btn btn-primary" type="button"  
+            aria-expanded="false" aria-controls="multiCollapseExample2"
+            (click)="toggle('questionList')">Get Question List</button>        
+      </p>
+    </div>
+  </div>
+  <div class="card" [ngClass]="{hide: !opened}">
+      <h5 class="card-header">Calculate Net Pay</h5>
+      <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #frm="ngForm">
+      <div class="form-row" >
+          <div class="col-sm-2">
+            <label for="exampleFormControlTextarea1">Submit Asset Data:</label>
+          </div>
+          <div class="col">
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
+          placeholder="Enter Asset Data in JSON Format"
+          ngModel name="assetData"></textarea>
+          </div>
+      </div>
+        <div class="form-row">
+          <div class="col-sm-2">
+            
+          </div>
+          <div class="col">
+            <input align="right" type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Encrypt Data</label>
+          </div>
+        </div>
+        <div class="form-row" >
+          <div class="col-sm-2">
+            <label for="exampleFormControlTextarea1">NetPay Results:</label>
+          </div>
+          <div class="col">
+           <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
+           ngModel name="netPayResults"></textarea>
+          </div>
+      </div>
+        <br>
+          <p align="center">
+            <button type="submit" class="btn btn-primary" >Submit</button>
+          </p>
+       
+      </form>
+      </div>
+   </div>
+
+  <div class="card" [ngClass]="{hide: !openedUpdateNetPay}">
+      <h5 class="card-header">Update Net Pay</h5>
+      <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #frm="ngForm">
+      <div class="form-row" >
+          <div class="col-sm-2">
+            <label for="exampleFormControlTextarea1">Submit Asset Data:</label>
+          </div>
+          <div class="col">
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
+          placeholder="Enter Asset Data in JSON Format"
+          ngModel name="assetData"></textarea>
+          </div>
+      </div>
+        <div class="form-row">
+          <div class="col-sm-2">
+            
+          </div>
+          <div class="col">
+            <input align="right" type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Encrypt Data</label>
+          </div>
+        </div>
+        <div class="form-row" >
+          <div class="col-sm-2">
+            <label for="exampleFormControlTextarea1">NetPay Results:</label>
+          </div>
+          <div class="col">
+           <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
+           ngModel name="netPayResults"></textarea>
+          </div>
+      </div>
+        <br>
+          <p align="center">
+            <button type="submit" class="btn btn-primary" >Submit</button>
+          </p>
+       
+      </form>
+      </div>
+   </div>   
+
+   <div id="multiCollapseExample2" class="card" [ngClass]="{hide: !openedQuestionList}">
+      <h5 class="card-header">Get Question List</h5>
+      <div class="card-body">
+      <form (ngSubmit)="onSubmit()" #frm="ngForm">
+        <div class="form-row" >
+          <div class="col-sm-2">
+            <label for="exampleFormControlTextarea1">Question List:</label>
+          </div>
+          <div class="col">
+           <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
+           ngModel name="netPayQuestionResults"></textarea>
+          </div>
+      </div>
+        <br>
+          <p align="center">
+        <button type="submit" class="btn btn-primary" >Submit</button>
+        
+          </p>
+       
+      </form>
+      </div>
+   </div>
+  </div>
+
+<!--<button (click)="toggle()">Collapsible</button>
+
+<div id="demo" [ngClass]="{hide: !opened}">
+Lorem ipsum dolor text....
+</div>-->
+
+
+  <!--<div id="accordion" role="tablist" aria-multiselectable="true">
     <div class="card">
       <div class="card-header" role="tab" id="headingOne">
         <h5 class="mb-0">
@@ -22,7 +150,7 @@
       </div>
     </div>
   </div>
-
+-->
 
 
 
