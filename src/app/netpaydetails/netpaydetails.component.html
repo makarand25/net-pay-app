@@ -44,7 +44,7 @@
           </div>
           <div class="col">
            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
-           ngModel name="netPayResults"></textarea>
+           ngModel name="netPayResults" placeholder="{{ assetDataResponse }}"></textarea>
           </div>
       </div>
         <br>
@@ -100,14 +100,16 @@
    <div id="multiCollapseExample2" class="card" [ngClass]="{hide: !openedQuestionList}">
       <h5 class="card-header">Get Question List</h5>
       <div class="card-body">
-      <form (ngSubmit)="onSubmit()" #frm="ngForm">
+      <form (ngSubmit)="getQuestions()" #frm="ngForm">
         <div class="form-row" >
           <div class="col-sm-2">
             <label for="exampleFormControlTextarea1">Question List:</label>
           </div>
           <div class="col">
-           <textarea class="form-control" id="exampleFormControlTextarea1" rows="10"
-           ngModel name="netPayQuestionResults"></textarea>
+           <textarea class="form-control" id="exampleFormControlTextarea1" rows="50"
+           ngModel name="netPayQuestionResults" placeholder="{{ questions }}">
+            <pre>{{questions | json}}</pre>
+           </textarea>
           </div>
       </div>
         <br>

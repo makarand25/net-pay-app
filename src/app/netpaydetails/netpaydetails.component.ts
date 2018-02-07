@@ -18,6 +18,9 @@ export class NetpaydetailsComponent implements OnInit {
 
   data: string;
 
+  questions: string;
+  assetDataResponse: string;
+
   constructor(private netpaySvc: NetPayApiService,
               private http: Http) { }
 
@@ -29,8 +32,26 @@ export class NetpaydetailsComponent implements OnInit {
     this.data = this.form.value.assetData;
     console.log(this.data);
     this.netpaySvc.calculateNetPay(this.data).subscribe(
-      res => console.log(res),
-      err => console.log(err._body),
+      (res: Response) =>  {
+        console.log(res),
+        this.assetDataResponse = res.json()
+      },
+      err => {
+        console.log(err)
+        this.assetDataResponse = err;
+      }
+      );
+
+  }
+
+  getQuestions(){
+
+    this.netpaySvc.getQuestions().subscribe(
+      res => { 
+        console.log(res.text()); 
+        this.questions = res.text();
+      },
+      err => console.log(err),
       );
 
   }

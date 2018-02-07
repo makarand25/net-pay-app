@@ -52,8 +52,8 @@ export class HealthcheckComponent implements OnInit {
         this.clientSecret = res.json().responseEntity.clientSecret;
         this.enableAccessToken=true;
       },
-      (err) => {
-        this.clientId=err.statusText; 
+      (err: Error) => {
+        this.clientId=err.message; 
       }
     );
   }
@@ -65,6 +65,9 @@ export class HealthcheckComponent implements OnInit {
         this.accessToken = res.json().responseEntity.token;
         this.refreshToken = res.json().responseEntity.refreshToken;
         this.enableApiKey = true;
+      },
+      (err: Error) => {
+        this.accessToken=err.message; 
       }
     )
 
@@ -76,6 +79,9 @@ export class HealthcheckComponent implements OnInit {
       (res: Response) => {
         this.apiKey = res.json().responseEntity.apiKey;
         this.enableHealth=true;
+      },
+      (err: Error) => {
+        this.apiKey=err.message; 
       }
     )
   }
@@ -86,7 +92,9 @@ export class HealthcheckComponent implements OnInit {
       (res: Response) => {
         this.health = res.text();
       },
-      (err) => { this.health = err}
+      (err: Error) => {
+        this.health=err.message; 
+      }
     )
   }
 
@@ -98,16 +106,13 @@ export class HealthcheckComponent implements OnInit {
 
     this.form.controls.netpayEnvironment.disable();
     this.form.controls.userId.disable();
-    this.form.controls.password.disable();
-
-    
+    this.form.controls.password.disable();    
   }
 
   reset(){
     this.form.controls.netpayEnvironment.enable();
     this.form.controls.userId.enable();
     this.form.controls.password.enable();
-
   }
 
 }

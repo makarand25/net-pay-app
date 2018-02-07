@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, RequestOptions, Headers } from '@angular/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
+import {catchError} from 'rxjs/operators';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 
 @Injectable()
 export class NetPayApiService {
@@ -67,10 +70,8 @@ export class NetPayApiService {
         console.error('Error: ${msg.status} ${msg.statusText}')
         return msg;
       }  
-    ).catch(
-      (err) => {
-       console.log("Error Occured!!");
-       return err;
+    ).catch((error: any) => {
+        return this.handleError(error);
     });
     
   }
@@ -98,7 +99,9 @@ export class NetPayApiService {
               return res;
             },
       (res: Response) => {console.error('Error:'+ res.json().statusText)}
-    )
+    ).catch((error: any) => {
+        return this.handleError(error);
+    })
     
 
   }
@@ -125,7 +128,9 @@ export class NetPayApiService {
               return res;
             },
       msg => console.error('Error: ${msg.status} ${msg.statusText}') 
-    );
+    ).catch((error: any) => {
+        return this.handleError(error);
+    });
 
   }
 
@@ -151,10 +156,9 @@ export class NetPayApiService {
               return res;
             }
 
-    ).catch(
-      (err) => {
-       return err.statusText;
-    })
+    ).catch((error: any) => {
+        return this.handleError(error);
+    });
       
   }
 
@@ -182,15 +186,66 @@ export class NetPayApiService {
         (res: Response) => { 
               console.log(res.text()); 
               return res;
-            }
+            },
+        (error) => {
+          console.log("error " + error);
+          // return Observable.throw(new Error(error));
+        }
 
-    )  
+    ).pipe(
+      catchError(this.handleErrorResponse)
+    ) 
   }
 
-  public handleError(error: Response) {
-    console.error(error.statusText);
-    return Observable.throw(error.json().error || 'Server error');
+private handleErrorResponse(error: HttpErrorResponse) {
+  if (error.error instanceof ErrorEvent) {
+    // A client-side or network error occurred. Handle it accordingly.
+    console.error('An error occurred:', error.error.message);
+  } else {
+    // The backend returned an unsuccessful response code.
+    // The response body may contain clues as to what went wrong,
+    console.error(
+      `Backend returned code ${error.status}, ` +
+      `body was: ${error}`);
   }
+  // return an ErrorObservable with a user-facing error message
+  return new ErrorObservable(
+    error);
+};
+
+public getQuestions(){
+    
+    let headers = new Headers();
+    console.log("Inside service calculateNetPay");
+    headers.append('Content-Type', 'application/json');   
+    headers.append('x-fnma-channel', 'api');
+    headers.append('x-fnma-api-key', this.apiKey);
+    headers.append('x-fnma-access-token', this.accessToken);
+    
+    let opts = new RequestOptions();
+    opts.headers = headers;
+    
+    // let url = this.proxyURL+'/'+this.apiBaseURL+'/'+this.netpayEnv+'/originations/borrowers/v1/netpay/health';
+
+    let url = this.apiBaseURL+'/'+this.netpayEnv+'/originations/borrowers/v1/netpay/questions';
+    return this.http.get(url,
+       opts).map(
+        (res: Response) => { 
+              //console.log(res.text()); 
+              return res;
+        }
+    ).catch((error: any) => {
+        return this.handleError(error);
+    });  
+  }
+
+
+  public handleError(error: any) {
+    return Observable.throw(new Error("Something went wrong. Please try again Later!"));
+  }
+
+
+
 
   public generate(){
     let headers = new Headers();
