@@ -34,7 +34,7 @@ export class NetpaydetailsComponent implements OnInit {
     this.netpaySvc.calculateNetPay(this.data).subscribe(
       (res: Response) =>  {
         console.log(res),
-        this.assetDataResponse = res.json()
+        this.assetDataResponse = res.text()
       },
       err => {
         console.log(err)
