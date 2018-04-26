@@ -1,0 +1,39 @@
+{
+    "AssetData": {
+        "Summary": {
+            "LenderLoanNumber": "123"
+        }
+        ,
+        "Income": [
+            {
+                "ApplicantName": "Bob",
+                "DUIncomeType": "SS",
+                "EmployerName": "FannieMae",
+                "IsSelfEmployed": false,
+                "IsCommissionGreater25": false,
+                "PaySchedule": "Biweekly",
+                "AccountType": "DDA",
+                "AccountNumber": "129021",
+                "LastDepositDate": "2017-08-11",
+                "LastDepositAmount": 1000,
+                "LastDepositDescription": "test deposit"
+            },
+           {
+                "ApplicantName": "Bob",
+                "DUIncomeType": "SS",
+                "EmployerName": "FannieMae",
+                "IsSelfEmployed": false,
+                "IsCommissionGreater25": false,
+                "PaySchedule": "Biweekly",
+                "AccountType": "DDA",
+                "AccountNumber": "129021",
+                "LastDepositDate": "2017-08-11",
+                "LastDepositAmount": 1000,
+                "LastDepositDescription": "test deposit"
+            }
+            
+        ]
+        
+    }
+    
+}
